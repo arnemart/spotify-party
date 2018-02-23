@@ -2,8 +2,8 @@
 
 DJ:
 
-`npm start http://server dj party-key`
+`node client.js http://server dj party-key`
 
 Client:
 
-`npm start http://server client party-key`
+`node client.js http://server client party-key`
