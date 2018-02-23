@@ -12,9 +12,9 @@ if (!server || !key || !mode) {
 }
 
 const socket = io(server);
-socket.on('connection', (socket) => socket.join(key));
 
 socket.on('message', console.log);
+socket.emit('join', { key: key });
 
 if (mode == 'dj') {
   let currentTrack;

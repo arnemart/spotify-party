@@ -14,6 +14,8 @@ let djs = {};
 io.on('connection', socket => {
   socket.emit('message', 'Welcome to the party!');
 
+  socket.on('join', data => socket.join(data.key));
+
   socket.on('control', data => {
     if (djs[data.key] == socket.id) {
       io.to(data.key).emit('control', data);
