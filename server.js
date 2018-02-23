@@ -14,13 +14,41 @@ let djs = {};
 io.on('connection', socket => {
   socket.emit('message', 'Welcome to the party!');
 
-  socket.on('join', data => socket.join(data.key));
+  socket.on('join', data => {
+    socket.join(data.key);
+    if (djs[data.key] && djs[data.key].playing) {
+      socket.emit('control', {
+        action: 'track',
+        url: djs[data.key].url,
+        position: djs[data.key].position
+      });
+    }
+  });
 
   socket.on('control', data => {
-    if (djs[data.key] == socket.id) {
+    if (djs[data.key].id == socket.id) {
       io.to(data.key).emit('control', data);
+
+      if (data.url) {
+        djs[data.key].url = data.url;
+      }
+      if (data.position) {
+        djs[data.key].position = data.position;
+      }
+      if (data.action == 'pause') {
+        djs[data.key].playing = false;
+      }
+      if (data.action == 'track') {
+        djs[data.key].playing = true;
+      }
     } else {
       socket.emit('message', 'You are not the dj of this party');
+    }
+  });
+
+  socket.on('update-position', data => {
+    if (djs[data.key].id == socket.id) {
+      djs[data.key].position = data.position;
     }
   });
 
@@ -28,7 +56,12 @@ io.on('connection', socket => {
     if (djs[data.key]) {
       socket.emit('message', 'This party already has a dj!');
     } else {
-      djs[data.key] = socket.id;
+      djs[data.key] = {
+        id: socket.id,
+        url: null,
+        position: 0,
+        playing: false
+      };
       socket.emit('message', 'You are now the dj of this party');
     }
   });
@@ -36,7 +69,7 @@ io.on('connection', socket => {
   socket.on('disconnect', data => {
     let newdjs = {};
     for (let key in djs) {
-      if (djs[key] != socket.id) {
+      if (djs[key].id != socket.id) {
         newdjs[key] = djs[key];
       }
     }

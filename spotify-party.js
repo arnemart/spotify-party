@@ -14,7 +14,6 @@ if (!server || !key || !mode) {
 const socket = io(server);
 
 socket.on('message', console.log);
-socket.emit('join', { key: key });
 
 if (mode == 'dj') {
   let currentTrack;
@@ -34,6 +33,7 @@ if (mode == 'dj') {
           console.log(err);
           return;
         }
+
         if (state.state == 'playing') {
           if (!playing) {
             playing = true;
@@ -43,6 +43,8 @@ if (mode == 'dj') {
               socket.emit('control', { action: 'track', url: track.spotify_url, key: key });
             } else if (track.spotify_url == currentTrack && state.position < currentPos - 5 || state.position > currentPos + 5) {
               socket.emit('control', { action: 'track', url: track.spotify_url, position: state.position, key: key });
+            } else if (currentPos != state.position) {
+              socket.emit('update-position', { position: state.position, key: key });
             }
           }
           currentTrack = track.spotify_url;
@@ -57,12 +59,14 @@ if (mode == 'dj') {
     });
   }, 1000);
 
-} else if (mode == 'client') {
+} else if (mode == 'client' || mode == 'verbose') {
+  socket.emit('join', { key: key });
+
   socket.on('control', data => {
+    if (mode == 'verbose') {
+      console.log(data);
+    }
     switch (data.action) {
-    case 'play':
-      spotify.play();
-      break;
     case 'pause':
       spotify.pause();
       break;
