@@ -1,9 +1,11 @@
 # Spotify party
 
-DJ:
+Installing: `npm install -g spotify-party`
 
-`node client.js http://server dj party-key`
+Join a spotify party:
 
-Client:
+`spotify-party http://server party-key`
 
-`node client.js http://server client party-key`
+Host a spotify party:
+
+`spotify-party http://server party-key dj`

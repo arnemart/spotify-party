@@ -1,9 +1,25 @@
 {
+  "name": "spotify-party",
+  "version": "1.0.0",
+  "description": "Have a Spotify party",
   "dependencies": {
     "socket.io": "^2.0.4",
     "spotify-node-applescript": "^1.1.1"
   },
   "scripts": {
     "start": "node server.js"
-  }
+  },
+  "bin": {
+    "spotify-party": "./spotify-party.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arnemart/spotify-party.git"
+  },
+  "author": "Arne Martin Aurlien",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/arnemart/spotify-party/issues"
+  },
+  "homepage": "https://github.com/arnemart/spotify-party#readme"
 }

@@ -1,10 +1,17 @@
+#!/usr/bin/env node
+
 const spotify = require('spotify-node-applescript');
 const io = require('socket.io-client');
 
+const [_, __, server, key, mode = 'client'] = process.argv;
 
-const [_, __, server, mode = 'client', key = 'party'] = process.argv;
 
-const socket = io(server.replace(/\/$/, ''));
+if (!server || !key || !mode) {
+  console.log("Usage: spotify-party http://server party-key [dj]");
+  process.exit();
+}
+
+const socket = io(server);
 socket.on('connection', (socket) => socket.join(key));
 
 socket.on('message', console.log);
