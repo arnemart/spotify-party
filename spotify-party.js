@@ -73,7 +73,7 @@ if (mode == 'dj') {
     case 'track':
       spotify.playTrack(data.url);
       if (data.position) {
-        spotify.jumpTo(data.position);
+        setTimeout(_ => spotify.jumpTo(data.position), 200);
       }
     }
   });
