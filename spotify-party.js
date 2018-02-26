@@ -77,4 +77,6 @@ if (mode == 'dj') {
       }
     }
   });
+} else if (mode == 'status') {
+  socket.emit('status');
 }

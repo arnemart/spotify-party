@@ -75,4 +75,10 @@ io.on('connection', socket => {
     }
     djs = newdjs;
   });
+
+  socket.on('status', data => {
+    for (let key in djs) {
+      io.in(key).clients((err, data) => socket.emit('message', 'Party ' + key + ': ' + data.length + ' listeners'));
+    }
+  });
 });
